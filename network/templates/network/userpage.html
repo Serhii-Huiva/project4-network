@@ -1,0 +1,36 @@
+{% extends "network/layout.html" %}
+
+{% block title %} {{ username }} {% endblock %}
+
+{% block body %}
+<div class="userInfo">
+    <h2 id="usern">{{ username }}</h2>
+    <div class="follow">
+        <div class="userfollowers">
+            <h5 id="userFollowers">Followers: {{ followers }}</h5>
+        </div>
+        <div class="userfollowed">
+            <h5 id="userfollowed">Follows: {{ followed }}</h5>
+        </div>
+        <div id="follow">
+
+        </div>
+    </div>
+</div>
+<div class="userposts">
+    {% for post in posts %}
+        <div class="post">
+            <div>
+                <h3 id="postUser"><a href={{post.user.id}} id="usrN">{{ post.user }}</a></h3>
+            </div>
+            <div>
+                <h5 id="postMessage">{{ post.content }}</h5>
+            </div>
+            <div>
+                <h6 id="postDateTime">{{ post.time }}</h6>
+                <button  id="postLike">Likes {{ post.like }}</button>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,93 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    max-width: 1200px;
+    margin: 0px auto;
+    text-align: center;
+    background-color: rgb(230, 255, 240);
+}
+
+#linknav {
+    width: 70%;
+}
+
+#usernav {
+    width: 20%;
+}
+
+.newPost {
+    margin: 10px 50px;
+    border: rgb(50, 100, 150) solid 2px;
+    border-radius: 15px;
+}
+
+#newPost {
+    margin: 10px;
+    width: 75%; 
+    border-radius: 10px;
+}
+
+#sendPost {
+    display: block;
+    margin: 0px auto 10px auto;
+    background-color: rgb(50, 100, 150);
+    color: rgb(230, 255, 240);
+    border-radius: 5px;
+}
+
+.post {
+    margin: 10px 50px;
+    border: rgb(50, 100, 150) solid 2px;
+    border-radius: 15px;
+    text-align: left;
+}
+
+#postUser a {
+    text-decoration: none;
+    margin: 10px auto 10px 25px;
+}
+
+#postMessage {
+    margin-left: 50px;
+}
+
+#postDateTime {
+    margin: 10px;
+}
+
+#postLike {
+    margin: 10px;
+    background-color: rgb(50, 100, 150);
+    color: rgb(230, 255, 240);
+    border-radius: 5px;
+}
+
+.userInfo {
+    margin: 10px 50px;
+    border: rgb(50, 100, 150) solid 2px;
+    border-radius: 15px;
+}
+
+#usern {
+    margin: 25px;
+} 
+
+.userfollowers, .userfollowed {
+    display: inline-block;
+    margin: 10px;
+    padding: 5px 10px;
+    color: rgb(230, 255, 240);
+    background-color: rgb(50, 100, 150);
+    border-radius: 5px;
+    width: 45%;
+}
+
+.editButton {
+    margin: 5px auto 5px 25px;
+    background-color: rgb(50, 100, 150);
+    color: rgb(230, 255, 240);
+    border-radius: 5px;
+    font-size: 18px;
+}
