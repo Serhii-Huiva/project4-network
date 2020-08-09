@@ -169,9 +169,11 @@ def likePost(request, post_id):
         if req["like"]:
             newL = Like(user=req["user"], post=post)
             newL.save()
+            print('save')
         else:
             delL = Like.objects.get(user=req["user"], post=post)
             delL.delete()
+            print('delete')
         
         return JsonResponse({"status": True}, status=200)
 

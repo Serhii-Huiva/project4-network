@@ -58,6 +58,21 @@ function likePost(id, like) {
     })
     .then(response => response.json())
     .then(data => {
-        console.log(data);
+        if (data.status) {
+            let button = document.querySelector(`.B${id}`);
+            let likeCount = document.querySelector(`#like${id}`);
+            let count = Number(likeCount.innerHTML.slice(7));
+
+            if (button.innerHTML == 'Like') {
+                button.innerHTML = "Unlike";
+                button.setAttribute('onclick', `likePost(${id}, false)`);
+                likeCount.innerHTML = `Likes: ${count + 1}`;
+            }
+            else {
+                button.innerHTML = "Like";
+                button.setAttribute('onclick', `likePost(${id}, true)`);
+                likeCount.innerHTML = `Likes: ${count - 1}`;
+            }
+        }
     })
 };

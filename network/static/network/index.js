@@ -3,16 +3,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document.querySelector('.post')) {
         //create like button
         if (document.querySelector('#userName')) {
-            const user = document.querySelector('#userName').innerHTML;
+            var user = document.querySelector('#userName').innerHTML;
             
             document.querySelectorAll('.postLike').forEach( button => {
                 const postUser = button.id.slice(4);
 
-                console.log(postUser, user);
-
                 if (postUser == user) {
                     button.style.display = 'none';
-                    console.log(true);
                 }
             })
         }
@@ -23,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll(".likeCount").forEach(element => {
             IDList[i] = element.id.slice(4);
             i++;
-        })
+        });
 
         fetch(`/getlike`, {
             method: 'POST',
@@ -41,23 +38,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 likeNumPost.innerHTML = `Likes: ${usersLikeList.length}`;
 
-                if (document.querySelector('#userName')) {
-                    const user = document.querySelector('#userName').innerHTML;
-    
-                    for (let i=0; i<usersLikeList.length; i++) {
-                        if (usersLikeList == user) {
-                            likeButton.innerHTML = 'Unlike';
-                            likeButton.setAttribute('onclick', `likePost(${key}, false)`);
-                            break;
-                        }
-                        if (i == usersLikeList.length - 1) {
-                            likeButton.innerHTML = 'Like';
-                            likeButton.setAttribute('onclick', `likePost(${key}, true)`);
-                        }
+                //const user = document.querySelector('#userName').innerHTML;
+
+                for (let i=0; i<usersLikeList.length; i++) {
+                    console.log(usersLikeList[i], user);
+                    if (usersLikeList[i] == user) {
+                        likeButton.innerHTML = 'Unlike';
+                        likeButton.setAttribute('onclick', `likePost(${key}, false)`);
+                        break;
                     }
-                }
-                else {
-                    likeButton.style.display = "none";
+                    if (i == usersLikeList.length - 1) {
+                        likeButton.innerHTML = 'Like';
+                        likeButton.setAttribute('onclick', `likePost(${key}, true)`);
+                    }
                 }
             };
         })
