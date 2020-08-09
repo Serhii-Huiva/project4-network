@@ -44,6 +44,10 @@ body {
     text-align: left;
 }
 
+#postUser {
+    display: inline;
+}
+
 #postUser a {
     text-decoration: none;
     margin: 10px auto 10px 25px;
@@ -55,13 +59,22 @@ body {
 
 #postDateTime {
     margin: 10px;
+    color: rgb(50, 100, 150);
+    font-size: 14px;
 }
 
-#postLike {
+.likeCount {
+    display: inline;
+    margin: 10px;
+    color: rgb(50, 100, 150);
+}
+
+.postLike {
     margin: 10px;
     background-color: rgb(50, 100, 150);
     color: rgb(230, 255, 240);
     border-radius: 5px;
+    display: inline;
 }
 
 .userInfo {
@@ -86,6 +99,15 @@ body {
 
 .editButton {
     margin: 5px auto 5px 25px;
+    background-color: rgb(50, 100, 150);
+    color: rgb(230, 255, 240);
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+#follUnfoll {
+    margin: 10px;
+    width: 90%;
     background-color: rgb(50, 100, 150);
     color: rgb(230, 255, 240);
     border-radius: 5px;

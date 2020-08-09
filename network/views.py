@@ -1,22 +1,24 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
-from django.http import HttpResponseRedirect #JsonResponse HttpResponse, 
+from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 #from django.core.paginator import Paginator
 # from django.utils import timezone
 
-# from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt
 
 
 import datetime
+import json
 
-from .models import User, Post, Follow
+from .models import User, Post, Follow, Like
 
 
 def index(request):
     if request.method == "GET":
         posts = Post.objects.all().order_by('-time')
+
         return render(request, "network/index.html", {
             "posts": posts,
         })
@@ -25,7 +27,7 @@ def index(request):
         user = request.user
         content = request.POST["newPost"]
 
-        np = Post(user=user, content=content, time=now, like=0)
+        np = Post(user=user, content=content, time=now)
         np.save()
 
         return redirect ("/")
@@ -106,8 +108,13 @@ def following(request, user_id):
 
     if len(follows) > 0:
         notFollowing = False
-        for foll in follows:
-            p0sts = Post.objects.all().filter(user = foll.following)
+        for f in range(len(follows)):
+            userN = User.objects.get(username = follows[f].following)
+            if f == 0:
+                p0sts = Post.objects.all().filter(user = userN.id)
+            else:
+                p0sts = p0sts | Post.objects.all().filter(user = userN.id)
+
         posts = p0sts.order_by('-time')
     else:
         notFollowing = True
@@ -117,3 +124,72 @@ def following(request, user_id):
         "notFollowing": notFollowing,
         "posts": posts
     })
+
+@csrf_exempt
+def follow(request, user_id):
+    if request.method == "POST":
+        req = json.loads(request.body)
+
+        if req['follow']:
+            newF = Follow(user=req['userName'], following=req['followUser'])
+            newF.save()
+        else:
+            delF = Follow.objects.get(user=req['userName'], following=req['followUser'])
+            delF.delete()
+    
+        return JsonResponse({"status": True}, status=200)
+
+    else:
+        userN = User.objects.get(id = user_id)
+        fol = Follow.objects.all().filter(following = userN.username)
+        followers =[]
+
+        for f in fol:
+            followers.append(f.user)
+
+        return  HttpResponse(json.dumps(followers))
+
+@csrf_exempt
+def changePost(request, post_id):
+    if request.method == "POST":
+        req = json.loads(request.body)
+
+        post = Post.objects.get(id = post_id)
+        post.content = req['content']
+        post.save()
+
+        return JsonResponse({"status": True}, status=200)
+
+@csrf_exempt
+def likePost(request, post_id):
+    if request.method == "POST":
+        req = json.loads(request.body)
+        post = Post.objects.get(id=post_id)
+
+        if req["like"]:
+            newL = Like(user=req["user"], post=post)
+            newL.save()
+        else:
+            delL = Like.objects.get(user=req["user"], post=post)
+            delL.delete()
+        
+        return JsonResponse({"status": True}, status=200)
+
+@csrf_exempt
+def getLike(request):
+    req = json.loads(request.body)
+    IDlist = req['IDlist']
+
+    responseList = {}
+
+    for ID in IDlist:
+        likeList = Like.objects.all().filter(post=ID)
+        userList = []
+
+        if len(likeList) > 0:
+            for obj in likeList:
+                userList.append(obj.user)
+
+        responseList[ID] = userList
+
+    return HttpResponse(json.dumps(responseList))

@@ -6,14 +6,14 @@
 <div class="userInfo">
     <h2 id="usern">{{ username }}</h2>
     <div class="follow">
+        {% if username != user %}
+            <div id="follow"> </div>
+        {% endif %}
         <div class="userfollowers">
             <h5 id="userFollowers">Followers: {{ followers }}</h5>
         </div>
         <div class="userfollowed">
             <h5 id="userfollowed">Follows: {{ followed }}</h5>
-        </div>
-        <div id="follow">
-
         </div>
     </div>
 </div>
@@ -22,6 +22,9 @@
         <div class="post">
             <div>
                 <h3 id="postUser"><a href={{post.user.id}} id="usrN">{{ post.user }}</a></h3>
+                {% if post.user == user %}
+                    <button class="editButton" onclick="editPost({{post.id}})">Edit post</button>
+                {% endif %}
             </div>
             <div>
                 <h5 id="postMessage">{{ post.content }}</h5>
@@ -33,4 +36,35 @@
         </div>
     {% endfor %}
 </div>
+
+<script>
+    fetch(`{{username.id}}/follow`)
+    .then(response => response.json())
+    .then(data => {
+        const user = String(`{{user}}`);
+        const userID = Number(`{{user.id}}`);
+        const followersNum = Number(`{{followers}}`);
+        let follower = false;
+
+        for (let f=0; f<followersNum; f++) {
+            if (user == data[f]) {
+                follower = true;
+                break;
+            };
+        };
+
+        const button = document.createElement('button');
+        button.id = "follUnfoll";
+        if (follower) {
+            button.setAttribute('onclick', `follow(false, ${userID})`);
+            button.innerHTML = "Unfollow";
+        }
+        else {
+            button.setAttribute('onclick', `follow(true, ${userID})`);
+            button.innerHTML = "Follow";
+        };
+
+        document.querySelector('#follow').appendChild(button);
+    });
+</script>
 {% endblock %}

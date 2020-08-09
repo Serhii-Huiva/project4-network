@@ -1,19 +1,86 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Create edit button
-    let post = document.querySelector('.post');
-    if (post != undefined) {
-        document.querySelectorAll('#usrN').forEach( name => {
-            const userName = document.querySelector('#userName').innerHTML;
-            const postUserName = name.innerHTML;
+    // switch like/unlike button
+    if (document.querySelector('.post')) {
+        //create like button
+        if (document.querySelector('#userName')) {
+            const user = document.querySelector('#userName').innerHTML;
+            
+            document.querySelectorAll('.postLike').forEach( button => {
+                const postUser = button.id.slice(4);
+
+                console.log(postUser, user);
+
+                if (postUser == user) {
+                    button.style.display = 'none';
+                    console.log(true);
+                }
+            })
+        }
+
+        //query users-likes list
+        let IDList = [];
+        let i = 0;
+        document.querySelectorAll(".likeCount").forEach(element => {
+            IDList[i] = element.id.slice(4);
+            i++;
+        })
+
+        fetch(`/getlike`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify({"IDlist": IDList})
+        })
+        .then(response => response.json())
+        .then(data => {
+            for (const key in data) {
+                const usersLikeList = data[key];
+                const likeNumPost = document.querySelector(`#like${key}`);
+                const likeButton = document.querySelector(`.B${key}`);
+
+                likeNumPost.innerHTML = `Likes: ${usersLikeList.length}`;
+
+                if (document.querySelector('#userName')) {
+                    const user = document.querySelector('#userName').innerHTML;
     
-            if (userName == postUserName) {
-                const editButton = document.createElement('button');
-                editButton.className = "editButton";
-                editButton.innerText = "Edit post";
-                editButton.onclick = "editPost()"
-    
-                name.parentElement.appendChild(editButton);
-            }
+                    for (let i=0; i<usersLikeList.length; i++) {
+                        if (usersLikeList == user) {
+                            likeButton.innerHTML = 'Unlike';
+                            likeButton.setAttribute('onclick', `likePost(${key}, false)`);
+                            break;
+                        }
+                        if (i == usersLikeList.length - 1) {
+                            likeButton.innerHTML = 'Like';
+                            likeButton.setAttribute('onclick', `likePost(${key}, true)`);
+                        }
+                    }
+                }
+                else {
+                    likeButton.style.display = "none";
+                }
+            };
         })
     }
-})
+});
+
+// edit post
+function editPost(id) {
+    let ID = '#ID' + String(`${id}`);
+    let post = document.querySelector(ID);
+
+    let innerHTLM = post.firstElementChild.innerHTML;
+    post.innerHTML = "";
+
+    let textarea = document.createElement('textarea');
+    textarea.className = "editPostContent";
+    textarea.value = innerHTLM;
+
+    let button = document.createElement('button');
+    button.className = "savePost";
+    button.innerHTML = "Save";
+    button.setAttribute('onclick', `savePost(${id})`);
+
+    post.appendChild(textarea);
+    post.appendChild(button);
+};
