@@ -3,8 +3,7 @@ from django.db import IntegrityError
 from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
-#from django.core.paginator import Paginator
-# from django.utils import timezone
+from django.core.paginator import Paginator
 
 from django.views.decorators.csrf import csrf_exempt
 
@@ -17,10 +16,13 @@ from .models import User, Post, Follow, Like
 
 def index(request):
     if request.method == "GET":
+        pageNum = request.GET.get('page')
         posts = Post.objects.all().order_by('-time')
+        paginator = Paginator(posts, 10)
+        pageResp = paginator.get_page(pageNum)
 
         return render(request, "network/index.html", {
-            "posts": posts,
+            "posts": pageResp
         })
     else:
         now = datetime.datetime.now()
@@ -86,8 +88,14 @@ def register(request):
         return render(request, "network/register.html")
 
 def userPage(request, user_id):
+    pageNum = request.GET.get('page')
+
     user = User.objects.get(id = user_id)
     posts = Post.objects.all().filter(user=user).order_by('-time')
+
+    paginator = Paginator(posts, 10)
+    pageResp = paginator.get_page(pageNum)
+
     try:
         followers = len(Follow.objects.all().filter(following = user))
         follows = len(Follow.objects.all().filter(user = user))
@@ -99,10 +107,12 @@ def userPage(request, user_id):
         "username": user,
         "followers": followers,
         "followed": follows,
-        "posts": posts
+        "posts": pageResp
     })
 
 def following(request, user_id):
+    pageNum = request.GET.get('page')
+
     user = User.objects.get(id = user_id)
     follows = Follow.objects.all().filter(user = user)
 
@@ -120,9 +130,12 @@ def following(request, user_id):
         notFollowing = True
         posts = []
 
+    paginator = Paginator(posts, 10)
+    pageResp = paginator.get_page(pageNum)
+
     return render(request, "network/following.html", {
         "notFollowing": notFollowing,
-        "posts": posts
+        "posts": pageResp
     })
 
 @csrf_exempt

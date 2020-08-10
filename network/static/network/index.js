@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const postUser = button.id.slice(4);
 
                 if (postUser == user) {
-                    button.style.display = 'none';
+                    button.style.display = "none";
                 }
             })
         }
@@ -38,23 +38,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 likeNumPost.innerHTML = `Likes: ${usersLikeList.length}`;
 
-                //const user = document.querySelector('#userName').innerHTML;
-
-                for (let i=0; i<usersLikeList.length; i++) {
-                    console.log(usersLikeList[i], user);
-                    if (usersLikeList[i] == user) {
-                        likeButton.innerHTML = 'Unlike';
-                        likeButton.setAttribute('onclick', `likePost(${key}, false)`);
-                        break;
-                    }
-                    if (i == usersLikeList.length - 1) {
-                        likeButton.innerHTML = 'Like';
-                        likeButton.setAttribute('onclick', `likePost(${key}, true)`);
-                    }
+                if (user) {
+                    for (let i=0; i<usersLikeList.length; i++) {
+                        if (usersLikeList[i] == user) {
+                            likeButton.innerHTML = 'Unlike';
+                            likeButton.setAttribute('onclick', `likePost(${key}, false)`);
+                            break;
+                        }
+                        if (i == usersLikeList.length - 1) {
+                            likeButton.innerHTML = 'Like';
+                            likeButton.setAttribute('onclick', `likePost(${key}, true)`);
+                        }
+                    };
+                }
+                else {
+                    likeButton.style.display = "none";
                 }
             };
-        })
-    }
+        });
+    };
 });
 
 // edit post

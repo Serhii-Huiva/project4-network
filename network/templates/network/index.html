@@ -30,4 +30,38 @@
             </div>
         {% endfor %}
     </div>
+
+    <div class="paginator_item">
+        {% if posts %}
+            {% if posts.paginator.num_pages > 1 %}
+                <nav aria-label="Page navigation example">
+                    <span class="current">
+                        Page {{ posts.number }} of {{ posts.paginator.num_pages }}.
+                    </span>
+
+                    <ul class="pagination">
+                        {% if posts.has_previous %}
+                            <li class="page-item"><a class="page-link" href="?page={{ posts.previous_page_number }}">&laquo; Previous</a></li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <span class="page-link">&laquo; Previous</span>
+                            </li>
+                        {% endif %}
+
+                        {% for page in posts.paginator.page_range %}
+                            <li class="page-item"><a class="page-link" href="?page={{page}}">{{page}}</a></li>
+                        {% endfor %}
+
+                        {% if posts.has_next %}
+                            <li class="page-item"><a class="page-link" href="?page={{ posts.next_page_number }}">Next &raquo;</a></li>
+                        {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link">Next &raquo;</span>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            {% endif %}
+        {% endif %}
+    </div>
 {% endblock %}

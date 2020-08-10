@@ -113,3 +113,22 @@ body {
     border-radius: 5px;
     font-size: 18px;
 }
+
+.editPostContent {
+    width: 98%;
+    margin: 10px;
+}
+
+.savePost {
+    display: block;
+    margin: 0px auto 10px auto;
+    background-color: rgb(50, 100, 150);
+    color: rgb(230, 255, 240);
+    border-radius: 5px;
+}
+
+.pagination {
+    text-align: center;
+    position: relative;
+    left: 40%;
+}
