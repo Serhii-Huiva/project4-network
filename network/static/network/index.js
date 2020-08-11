@@ -57,6 +57,38 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         });
     };
+
+    // get user follow informations
+    if (document.querySelector('.userFollow')) {
+        let IDList = [];
+        let i = 0;
+        document.querySelectorAll(".followers").forEach(element => {
+            IDList[i] = element.id.slice(9);
+            i++;
+        });
+
+        fetch(`/getfollow`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify({"IDlist": IDList})
+        })
+        .then(response => response.json())
+        .then(data => {
+            for (const key in data) {
+                const follow = data[key];
+                const folowers = follow[0];
+                const folows = follow[1];
+
+                const followers = document.querySelector(`#followers${key}`);
+                const follows = document.querySelector(`#followed${key}`);
+
+                followers.innerHTML = `Followers: ${folowers}`;
+                follows.innerHTML = `Followers: ${folows}`;
+            };
+        });
+    };
 });
 
 // edit post

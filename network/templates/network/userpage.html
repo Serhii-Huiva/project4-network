@@ -10,10 +10,10 @@
             <div id="follow"> </div>
         {% endif %}
         <div class="userfollowers">
-            <h5 id="userFollowers">Followers: {{ followers }}</h5>
+            <h5 id="userFollowers"><a href="{{username.id}}/followers">Followers: {{ followers }}</a></h5>
         </div>
         <div class="userfollowed">
-            <h5 id="userfollowed">Follows: {{ followed }}</h5>
+            <h5 id="userfollowed"><a href="{{username.id}}/follows">Follows: {{ followed }}</a></h5>
         </div>
     </div>
 </div>
@@ -29,7 +29,7 @@
             <div id="ID{{post.id}}">
                 <h5 id="postMessage">{{ post.content }}</h5>
             </div>
-            <div">
+            <div>
                 <h6 id="postDateTime">{{ post.time }}</h6>
                 <h6 class="likeCount" id="like{{post.id}}"></h6>
                 <button class="postLike B{{post.id}}" id="like{{post.user}}" onclick="likePost({{post.id}}, true)">Like</button>

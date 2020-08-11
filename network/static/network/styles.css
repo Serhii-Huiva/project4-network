@@ -132,3 +132,9 @@ body {
     position: relative;
     left: 40%;
 }
+
+.userFollow {
+    margin: 10px 50px;
+    border: rgb(50, 100, 150) solid 2px;
+    border-radius: 15px;
+}
