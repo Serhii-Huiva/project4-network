@@ -138,34 +138,6 @@ def following(request, user_id):
         "posts": pageResp
     })
 
-def followers(request, user_id):
-    pageNum = request.GET.get('page')
-
-    user = User.objects.get(id = user_id)
-    followers = Follow.objects.all().filter(user = user)
-    paginator = Paginator(followers, 10)
-    pageResp = paginator.get_page(pageNum)
-
-    print(pageResp)
-
-    return render(request, "network/follow.html", {
-        "username": user,
-        "users": pageResp
-    })
-
-def follows(request, user_id):
-    pageNum = request.GET.get('page')
-
-    user = User.objects.get(id = user_id)
-    follows = Follow.objects.all().filter(following = user)
-    paginator = Paginator(follows, 10)
-    pageResp = paginator.get_page(pageNum)
-
-    return render(request, "network/follow.html", {
-        "username": user,
-        "users": pageResp
-    })
-
 @csrf_exempt
 def follow(request, user_id):
     if request.method == "POST":
@@ -210,11 +182,9 @@ def likePost(request, post_id):
         if req["like"]:
             newL = Like(user=req["user"], post=post)
             newL.save()
-            print('save')
         else:
             delL = Like.objects.get(user=req["user"], post=post)
             delL.delete()
-            print('delete')
         
         return JsonResponse({"status": True}, status=200)
 
@@ -234,26 +204,5 @@ def getLike(request):
                 userList.append(obj.user)
 
         responseList[ID] = userList
-
-    return HttpResponse(json.dumps(responseList))
-
-@csrf_exempt
-def getFollow(request):
-    req = json.loads(request.body)
-    IDlist = req['IDlist']
-
-    responseList = {}
-
-    for ID in IDlist:
-        f = []
-        user = User.objects.get(id = ID)
-
-        fowers = len(Follow.objects.all().filter(user = user.username))
-        f.append(fowers)
-
-        fows = len(Follow.objects.all().filter(following = user.username))
-        f.append(fows)
-
-        responseList[ID] = f
 
     return HttpResponse(json.dumps(responseList))
